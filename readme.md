@@ -1,5 +1,7 @@
 # gitlab-deploy-preview-bot
 
+![build](https://github.com/marnixah/gitlab-deploy-preview-bot/actions/workflows/docker-publish.yaml/badge.svg)
+
 This bot is used to comment on all PRs a simple link to the deployment preview.
 
 ## Environment Variables
