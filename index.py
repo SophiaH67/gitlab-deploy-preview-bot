@@ -2,13 +2,16 @@ from gidgetlab.aiohttp import GitLabBot
 from os import getenv
 
 bot = GitLabBot(getenv("GL_USER"))
+deploy_template = getenv("DEPLOY_URL_TEMPLATE")
 
-# Register a callack for a webhook event
-@bot.router.register("Issue Hook", action="open")
-async def issue_opened_event(event, gl, *args, **kwargs):
-  url = f"/projects/{event.project_id}/issues/{event.object_attributes['iid']}/notes"
-  print(f"Posting to {url}")
-  message = f"Thanks for the report @{event.data['user']['username']}! I will look into it ASAP! (I'm a bot)."
+# Register a callack for a webhook event on merge requests
+@bot.router.register("Merge Request Hook", action="open")
+async def merge_opened_event(event, gl, *args, **kwargs):
+  url = f"/projects/{event.project_id}/merge_requests/{event.object_attributes['iid']}/discussions"
+  
+  deploy_url = deploy_template.format(branch=event.object_attributes['source_branch'], project=event.object_attributes['source']['name'])
+  
+  message=f"Thanks💖✨for your👆💁 issue🚀🦄!\n\nDeploy📦 URL🌐 when it's ready🤑⏰: [🙈Click Me!🤫]({deploy_url})"
   await gl.post(url, data={"body": message})
 
 bot.run()
