@@ -11,6 +11,7 @@ async def merge_opened_event(event, gl, *args, **kwargs):
 
   branch = event.object_attributes['source_branch']
   branch = branch.replace("/", "")
+  branch = branch.replace("_", "")
   # Truncate the branch name to 12 characters
   if len(branch) > 12:
     branch = branch[:12]
